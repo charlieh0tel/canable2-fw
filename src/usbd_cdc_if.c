@@ -263,7 +263,7 @@ void cdc_transmit(uint8_t* buf, uint16_t len)
     //            = (USBTXQUEUE_LEN - 1U - txbuf.head + txbuf.tail) % USBTXQUEUE_LEN
     //
     // It should be like
-    //if (len >= (USBTXQUEUE_LEN - 1U - txbuf.head + txbuf.tail) % USBTXQUEUE_LEN)
+    //if (len > (USBTXQUEUE_LEN - 1U - txbuf.head + txbuf.tail) % USBTXQUEUE_LEN)
     // ?
     {
         error_assert(ERR_FULLBUF_USBTX);
