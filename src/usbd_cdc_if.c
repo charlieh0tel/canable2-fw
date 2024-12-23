@@ -251,6 +251,20 @@ void cdc_transmit(uint8_t* buf, uint16_t len)
 {
     system_irq_disable();
     if( ((txbuf.head + len) % USBTXQUEUE_LEN) == txbuf.tail)    // FIXME no error if size of enqueued data > size of empty area
+    //
+    // txbuf.tail: First in data = First out data
+    // head: Head of empty area = Last in data + 1
+    //
+    // data count in q: (txbuf.head - txbuf.tail + USBTXQUEUE_LEN) % USBTXQUEUE_LEN
+    // size of q: USBTXQUEUE_LEN - 1U // we cannot set tail = head. it's empty.
+    //
+    // usable size: "size of q" - "data count in q"
+    //            = (USBTXQUEUE_LEN - 1U) - (txbuf.head - txbuf.tail + USBTXQUEUE_LEN) % USBTXQUEUE_LEN
+    //            = (USBTXQUEUE_LEN - 1U - txbuf.head + txbuf.tail) % USBTXQUEUE_LEN
+    //
+    // It should be like
+    //if (len >= (USBTXQUEUE_LEN - 1U - txbuf.head + txbuf.tail) % USBTXQUEUE_LEN)
+    // ?
     {
         error_assert(ERR_FULLBUF_USBTX);
     }
