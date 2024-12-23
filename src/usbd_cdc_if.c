@@ -253,7 +253,6 @@ void cdc_transmit(uint8_t* buf, uint16_t len)
     if( ((txbuf.head + len) % USBTXQUEUE_LEN) == txbuf.tail)    // FIXME no error if size of enqueued data > size of empty area
     {
         error_assert(ERR_FULLBUF_USBTX);
-        return;    // FIXME this will leave the system interrupt disabled
     }
     else
     {
